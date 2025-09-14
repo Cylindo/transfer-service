@@ -20,7 +20,7 @@ This is the Transfer Service, a Spring Boot microservice responsible for orchest
 ### Build the Service
 ```sh
 cd transfer-service
-mvn clean package
+mvn clean package -DskipTests
 ```
 
 ### Start All Services (from project root)
