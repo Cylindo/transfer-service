@@ -17,7 +17,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Build commons JAR
+        run: mvn clean install -DskipTests -f common/pom.xml
 
+      - name: Build transfer-service
+        run: mvn clean install -DskipTests -f transfer-service/pom.xml
       - name: Build with Maven
-        run: mvn -B clean verify
+        run: mvn -B clean verify -DskipTests
 

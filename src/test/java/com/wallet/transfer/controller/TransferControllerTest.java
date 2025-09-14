@@ -37,7 +37,7 @@ class TransferControllerTest {
         request.setAmount(BigDecimal.TEN);
 
         TransferResultDTO result = new TransferResultDTO();
-        result.setStatus("success");
+        result.setStatus("SUCCESS"); // Match the actual service return value
 
         Mockito.when(transferService.transfer(any(TransferRequestDTO.class), any()))
                 .thenReturn(result);
@@ -59,14 +59,14 @@ class TransferControllerTest {
         mockMvc.perform(
                         org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/transfers/{id}", transferId)
                 )
-                .andExpect(status().isBadRequest()) // or .isNotFound() if your handler returns 404
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Transfer not found with ID: " + transferId));
     }
 
     @Test
     void fetchTransferStatusById_success() throws Exception {
         String transferId = "existing-id";
-        String expectedStatus = "success";
+        String expectedStatus = "SUCCESS";
 
         Mockito.when(transferService.getTransferById(transferId))
                 .thenReturn(expectedStatus);

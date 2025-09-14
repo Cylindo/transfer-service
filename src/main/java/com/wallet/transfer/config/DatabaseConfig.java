@@ -9,6 +9,7 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
+@Profile("!test")  // exclude this config when "test" profile is active
 public class DatabaseConfig {
     @Autowired
     private Environment env;
