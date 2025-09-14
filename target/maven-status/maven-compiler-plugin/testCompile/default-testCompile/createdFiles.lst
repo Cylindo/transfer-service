@@ -1,0 +1,5 @@
+com\wallet\transfer\integration\CircuitBreakerIntegrationTest.class
+com\wallet\transfer\controller\TransferControllerTest.class
+com\wallet\transfer\service\TransferServiceProcessorTest.class
+com\wallet\transfer\integration\ConcurrentTransferIntegrationTest.class
+com\wallet\transfer\ApplicationTests.class

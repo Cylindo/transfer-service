@@ -1,0 +1,5 @@
+C:\sli\java-projects\transfer-service\src\test\java\com\wallet\transfer\TransferServiceTests.java
+C:\sli\java-projects\transfer-service\src\test\java\com\wallet\transfer\controller\TransferControllerTest.java
+C:\sli\java-projects\transfer-service\src\test\java\com\wallet\transfer\integration\ConcurrentTransferIntegrationTest.java
+C:\sli\java-projects\transfer-service\src\test\java\com\wallet\transfer\service\TransferServiceProcessorTest.java
+C:\sli\java-projects\transfer-service\src\test\java\com\wallet\transfer\integration\CircuitBreakerIntegrationTest.java
