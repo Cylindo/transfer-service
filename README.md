@@ -20,7 +20,7 @@ This is the Transfer Service, a Spring Boot microservice responsible for orchest
 ### Build the Service
 ```sh
 cd transfer-service
-mvn clean package
+mvn clean package -DskipTests
 ```
 
 ### Start All Services (from project root)
@@ -40,10 +40,15 @@ This will start:
 ### Idempotency
 Clients must generate and provide a unique `Idempotency-Key` header for each transfer request. The service will return the same result for repeated requests with the same key.
 
+
 ### Development Notes
 - The shared `docker-compose.yml` is at the project root and manages both services and their databases.
 - Each service has its own database and does not access the other's tables.
 - For local development, you can build and test each service independently with Maven.
+-  No authentication required by default, but code is structured for easy future integration (see SOLUTION.md).
+- For troubleshooting, check logs in the Docker containers.
+- **Docker Compose is shared:** This service relies on the `docker-compose.yml` in the base project root. Make sure to run Docker Compose commands from the base directory, not from within `ledger-service`.
+
 
 ### CI
 A minimal GitHub Actions workflow is provided in `.github/workflows/ci.yml` to build and test the service on push/PR.
