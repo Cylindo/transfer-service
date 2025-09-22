@@ -43,7 +43,7 @@ public class DatabaseConfig {
     @Bean(name = "entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("primaryDataSource") DataSource dataSource) {
+            @Qualifier("dataSource") DataSource dataSource) {
         return builder.dataSource(dataSource)
                 .packages("com.wallet.transfer.entity")
                 .persistenceUnit("primary")

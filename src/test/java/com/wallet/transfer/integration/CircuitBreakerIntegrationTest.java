@@ -1,36 +1,39 @@
 package com.wallet.transfer.integration;
 
 import com.wallet.transfer.dto.TransferRequestDTO;
-import com.wallet.transfer.entity.Transfer;
+import com.wallet.transfer.dto.TransferResultDTO;
 import com.wallet.transfer.service.TransferService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-public class CircuitBreakerIntegrationTest {
+@ActiveProfiles("test")
+@TestPropertySource(properties = {
+        "ledger-api.host=http://ledger-service:59999", // unreachable to force circuit breaker fallback
+        "ledger-api.transfer.api=/api/ledger/transfer"
+})
+class CircuitBreakerIntegrationTest {
+
     @Autowired
     private TransferService transferService;
 
     @Test
-    @CircuitBreaker(name = "accountService", fallbackMethod = "fallback")
-    void transferWithFailure() {
+    void circuitBreakerFallback_onLedgerFailure() {
         TransferRequestDTO request = new TransferRequestDTO();
-        request.setFromAccountId(999L); // Non-existent account to simulate failure
+        request.setFromAccountId(999L); // arbitrary id to simulate failure path
         request.setToAccountId(2L);
         request.setAmount(BigDecimal.ONE);
 
-        // Simulate failure (throwing exception in AccountService call)
-        assertDoesNotThrow(() -> transferService.transfer(request, "test-user"));
-    }
-
-    public Transfer fallback(Long fromAccountId, Long toAccountId, BigDecimal amount, Throwable t) {
-        Transfer transfer = new Transfer();
-        transfer.setStatus("FAILED");
-        return transfer;
+        TransferResultDTO result = transferService.transfer(request, "cb-fail-1");
+        assertNotNull(result);
+        assertEquals("failure", result.getStatus(), "Expected fallback status 'failure'");
     }
 }

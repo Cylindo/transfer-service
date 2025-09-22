@@ -1,17 +1,19 @@
 package com.wallet.transfer.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wallet.transfer.dto.TransferRequestDTO;
 import com.wallet.transfer.dto.TransferResultDTO;
 import com.wallet.transfer.service.TransferService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 
@@ -20,14 +22,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(TransferController.class)
+@ExtendWith(MockitoExtension.class)
 class TransferControllerTest {
-    @Autowired
+
     private MockMvc mockMvc;
-    @MockBean
+
+    @Mock
     private TransferService transferService;
-    @Autowired
+
     private ObjectMapper objectMapper;
+
+    @InjectMocks
+    private TransferController transferController;
+
+    @BeforeEach
+    void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(transferController).build();
+        objectMapper = new ObjectMapper();
+    }
 
     @Test
     void transfer_success() throws Exception {
@@ -60,7 +72,7 @@ class TransferControllerTest {
                         org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get("/transfers/{id}", transferId)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Transfer not found with ID: " + transferId));
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content().string("Transfer not found with ID: " + transferId));
     }
 
     @Test

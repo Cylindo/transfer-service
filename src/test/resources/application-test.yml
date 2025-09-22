@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    # In-memory H2 database configured to emulate PostgreSQL syntax where possible
+    url: jdbc:h2:mem:transferdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update  # or create-drop if you want a clean schema each run
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+logging:
+  level:
+    org.springframework: INFO
+    com.wallet.transfer: DEBUG
+
+# Stub / configurable ledger API host for tests (can be overridden in specific tests)
+ledger-api:
+  host: 'http://localhost:8081'
+  transfer:
+    api: '/api/ledger/transfer'
+
+# Notes:
+# - Using H2 in PostgreSQL compatibility MODE so most Postgres-specific SQL should still work.
+# - DATABASE_TO_LOWER helps avoid identifier case issues.
+# - Adjust ddl-auto (create / create-drop / update / validate) to match test isolation needs.
